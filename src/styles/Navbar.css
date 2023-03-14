@@ -1,0 +1,37 @@
+.wrapper_navbar {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  
+}
+.navbar_container {
+    display: flex;
+    justify-content: space-between;
+}
+.navbar_logo {
+    width: 12%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.navbar_logo div {
+font-family: 'DM Sans', sans-serif;
+}
+.navbar_search {
+    display: flex;
+    align-items: center;
+    width: 25%;
+    margin: 0 100px 0 60px;
+}
+.navbar_search input {
+    font-family: 'DM Sans', sans-serif;
+}
+.navbar_list {
+    width: 40%;
+    display: flex;
+    justify-content: space-around;
+    
+}
+.navbar_list p {
+    font-family: 'DM Sans', sans-serif;
+}
+

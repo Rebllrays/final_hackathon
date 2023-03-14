@@ -1,0 +1,8 @@
+.wrapper__form {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 64px 0;
+    /* padding: 30px; */
+    
+}

@@ -1,15 +1,18 @@
 import React from "react";
-import { BrowserRouter} from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import Routing from "./Routing";
 import Navbar from "./components/Content/Navbar/Navbar";
+import AuthContextProvider from "./contexts/AuthContextProvider";
 
 function App() {
   return (
     <>
-    <BrowserRouter>
-       <Navbar />
-       <Routing />
-    </BrowserRouter>
+      <AuthContextProvider>
+        <BrowserRouter>
+          <Navbar />
+          <Routing />
+        </BrowserRouter>
+      </AuthContextProvider>
     </>
   );
 }

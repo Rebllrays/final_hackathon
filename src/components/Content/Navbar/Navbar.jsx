@@ -1,27 +1,68 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
-import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
+import { styled, alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
-import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import AdbIcon from "@mui/icons-material/Adb";
+import { useNavigate } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+
+import InputBase from "@mui/material/InputBase";
+import Badge from "@mui/material/Badge";
+
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { HiViewGridAdd } from "react-icons/hi";
 import {HiDotsVertical} from "react-icons/hi";
 import "../../../styles/Navbar.css";
 
+const pages = [
+  {
+    type: "Overview",
+    path: "/",
+  },
+
+  {
+    type: "Live",
+    path: "/streams",
+  },
+  {
+    type: "Video",
+    path: "/video",
+  },
+  {
+    type: "Channels",
+    path: "/channels",
+  },
+];
+const settings = [
+  {
+    type: "Profile",
+    path: "/profile",
+  },
+  {
+    type: "Sign Up",
+    path: "/register",
+  },
+  {
+    type: "Sign In",
+    path: "/login",
+  },
+];
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -72,117 +113,53 @@ const lightTheme = createTheme({
   },
 });
 
+function ResponsiveAppBar() {
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-export default function PrimarySearchAppBar() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={() => navigate("/register")}>Sign Up</MenuItem>
-      <MenuItem onClick={() => navigate("/login")}>Sing In</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Sing Out</MenuItem> 
-    </Menu>
-  );
-
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
 
   const navigate = useNavigate();
-
   return (
     <ThemeProvider theme={lightTheme}>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" className="wrapper_navbar">
-          <Toolbar>
+      <AppBar position="static" className="wrapper_navbar">
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
             <Box className="navbar_logo">
-              <HiViewGridAdd color="#bb2649" size="38px" />
+              <HiViewGridAdd
+                color="#bb2649"
+                size="38px"
+                sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+                onClick={() => navigate("/")}
+              />
               <Typography
                 variant="h6"
                 noWrap
                 component="div"
-                sx={{ display: { xs: "none", sm: "block" } }}
+                sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+                onClick={() => navigate("/")}
               >
                 LiveFusion
               </Typography>
             </Box>
-            <Box className="navbar_search">
+
+            <Box
+              className="navbar_search"
+              sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+            >
               <Search>
                 <SearchIconWrapper>
                   <SearchIcon />
@@ -192,57 +169,124 @@ export default function PrimarySearchAppBar() {
                   inputProps={{ "aria-label": "search" }}
                 />
               </Search>
-              <HiDotsVertical size="25px" />
-            </Box>
-            <Box className="navbar_list">
-              <Typography onClick={() => navigate("/")}>Overview</Typography>
-              <Typography onClick={() => navigate("/streams")}>Live</Typography>
-              <Typography onClick={() => navigate("/video")}>Video</Typography>
-              <Typography onClick={() => navigate("/channels")}>
-                Channels
-              </Typography>
             </Box>
 
-            <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
-                aria-label="show 17 new notifications"
-                color="inherit"
-              >
-                <Badge badgeContent={17} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                edge="end"
                 aria-label="account of current user"
-                aria-controls={menuId}
+                aria-controls="menu-appbar"
                 aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
+                onClick={handleOpenNavMenu}
                 color="inherit"
               >
-                <AccountCircle />
+                <MenuIcon />
               </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
+                }}
+              >
+                {pages.map((page) => (
+                  <MenuItem key={page.type} onClick={handleCloseNavMenu}>
+                    <Typography
+                      textAlign="center"
+                      onClick={() => navigate(page.path)}
+                    >
+                      {page.type}
+                    </Typography>
+                  </MenuItem>
+                ))}
+                <Box sx={{ mr: 2, display: { xs: "block", md: "none" } }}>
+                  <Search>
+                    <SearchIconWrapper>
+                      <SearchIcon />
+                    </SearchIconWrapper>
+                    <StyledInputBase
+                      placeholder="Search…"
+                      inputProps={{ "aria-label": "search" }}
+                    />
+                  </Search>
+                </Box>
+              </Menu>
             </Box>
-            <Box sx={{ display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="show more"
-                aria-controls={mobileMenuId}
-                aria-haspopup="true"
-                onClick={handleMobileMenuOpen}
-                color="inherit"
+
+            <Box
+              sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
+              className="navbar_list"
+            >
+              {pages.map((page) => (
+                <Button
+                  key={page.type}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                  onClick={() => {
+                    navigate(page.path);
+                  }}
+                >
+                  {page.type}
+                </Button>
+              ))}
+            </Box>
+
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
               >
-                <MoreIcon />
-              </IconButton>
+                {settings.map((setting) => (
+                  <MenuItem key={setting.type} onClick={handleCloseUserMenu}>
+                    <Typography
+                      textAlign="center"
+                      onClick={() => navigate(setting.path)}
+                    >
+                      {setting.type}
+                    </Typography>
+                  </MenuItem>
+                ))}
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography
+                    textAlign="center"
+                    // onClick={logout}
+                  >
+                    Sing Out
+                  </Typography>
+                </MenuItem>
+              </Menu>
             </Box>
           </Toolbar>
-        </AppBar>
-        {renderMobileMenu}
-        {renderMenu}
-      </Box>
+        </Container>
+      </AppBar>
     </ThemeProvider>
   );
 }
+export default ResponsiveAppBar;

@@ -27,7 +27,7 @@ const AuthContextProvider = ({children}) => {
 
       async function handleLogin(formData, username, navigate) {
         try{
-            let res = await axios.post(`${API}/account/login`, formData);
+            let res = await axios.post(`${API}/account/login/`, formData);
             localStorage.setItem("tokens", JSON.stringify(res.data));
             localStorage.setItem("username", username);
             setCurrentUser(username);

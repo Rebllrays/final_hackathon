@@ -18,7 +18,7 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordConf, setPasswordConf] = useState(false);
+  const [passwordConf, setPasswordConf] = useState("");
 
   useEffect(() => {
     setError(false);

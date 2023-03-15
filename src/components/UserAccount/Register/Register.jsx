@@ -1,76 +1,117 @@
-import React, {useState} from 'react';
-import InputUnstyled from "@mui/base/InputUnstyled";
-import { styled } from "@mui/system";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContextProvider";
+import Loader from "../Loader/Loader";
+
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import FormLabel from "@mui/material/FormLabel";
-import { useNavigate } from "react-router-dom";
-import "../../../styles/Reg_Log.css"
-
-const StyledInputElement = styled("input")(
-  ({ theme }) => `
-  width: 300px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1.5;
-  padding: 12px;
-  color: #171718;
-  background: ${theme.palette.mode === "light" ? "aria-label" : "#fff"};
-
-  &:hover {
-    border-color: #fff;
-  };
-  }
-`
-);
-
-const CustomInput = React.forwardRef(function CustomInput(props, ref) {
-  return (
-    <InputUnstyled slots={{ input: StyledInputElement }} {...props} ref={ref} />
-  );
-});
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import { AiFillGithub } from "react-icons/ai";
+import "../../../styles/Reg_Log.css";
 
 const Register = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const navigate = useNavigate();
+  const { handleRegister, error, setError, loading } = useAuth();
+  const navigate = useNavigate();
+
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConf, setPasswordConf] = useState(false);
+
+  useEffect(() => {
+    setError(false);
+  }, []);
+
+  function handleSave() {
+    if (
+      !username.trim() ||
+      !email.trim() ||
+      !password.trim() ||
+      !passwordConf.trim()
+    ) {
+      alert("Some inputs are empty!");
+      return;
+    }
+    let formData = new FormData();
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("password2", passwordConf);
+    handleRegister(formData, navigate);
+  }
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
-    <div className="wrapper__form">
-      <FormControl className="wrapper_container">
-        <h2>Join Livefusion</h2>
-        {/* {error ? <h3>{error}</h3> : ""} */}
-        <Stack spacing={2} direction="column">
-          <div className="wrapper_content">
-            <FormLabel>*Email</FormLabel>
-            <CustomInput
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="input_box"
-            />
-            <FormLabel>*Password</FormLabel>
-            <CustomInput
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input_box"
-            />
-          </div>
-          <Button
-            // onClick={() => register(username, password)}
-            className="btn_reg"
-          >
-            Create My Account
-            {/* <ArrowForwardIcon onClick={() => navigate("/login")} /> */}
-          </Button>
-        </Stack>
-      </FormControl>
+    <div className="wrapper">
+      <div className="wrapper__form">
+        <FormControl className="wrapper__container">
+          <h2>
+            Join <b style={{ color: "#bb2649" }}>LiveFusion</b>
+          </h2>
+          {error ? <h3>{error}</h3> : ""}
+          <Stack spacing={2} direction="column">
+            <div className="wrapper_content">
+              <Stack spacing={2} direction="column">
+                <TextField
+                  label="Username"
+                  variant="outlined"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  color="error"
+                />
+                <TextField
+                  label="Email"
+                  variant="outlined"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="input_box"
+                  color="error"
+                />
+
+                <TextField
+                  type="password"
+                  label="Password"
+                  variant="outlined"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  color="error"
+                />
+                <TextField
+                  type="password"
+                  label="Password Confirmation"
+                  variant="outlined"
+                  value={passwordConf}
+                  onChange={(e) => setPasswordConf(e.target.value)}
+                  color="error"
+                />
+              </Stack>
+            </div>
+
+            <Button onClick={handleSave}>Sign Up</Button>
+            <p>or</p>
+            <IconButton
+              style={{
+                color: "#fff",
+                backgroundColor: "#000",
+                borderRadius: "5px",
+              }}
+            >
+              <AiFillGithub />
+            </IconButton>
+            <p>
+              Already Have An Account?{" "}
+              <a onClick={() => navigate("/login")}>Sing In!</a>
+            </p>
+          </Stack>
+        </FormControl>
+      </div>
     </div>
   );
-}
+};
 
 export default Register;
